@@ -841,6 +841,39 @@ export interface ApiPagePage extends Schema.CollectionType {
   };
 }
 
+export interface ApiPostPost extends Schema.CollectionType {
+  collectionName: 'posts';
+  info: {
+    singularName: 'post';
+    pluralName: 'posts';
+    displayName: 'Post';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    editorContent: Attribute.RichText &
+      Attribute.CustomField<
+        'plugin::ckeditor.CKEditor',
+        {
+          output: 'HTML';
+          preset: 'rich';
+        }
+      >;
+    title: Attribute.String;
+    description: Attribute.Text;
+    previewImage: Attribute.Media;
+    previewVideo: Attribute.Media;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSocialMediaSocialMedia extends Schema.CollectionType {
   collectionName: 'social_medias';
   info: {
@@ -894,6 +927,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::meta.meta': ApiMetaMeta;
       'api::page.page': ApiPagePage;
+      'api::post.post': ApiPostPost;
       'api::social-media.social-media': ApiSocialMediaSocialMedia;
     }
   }
